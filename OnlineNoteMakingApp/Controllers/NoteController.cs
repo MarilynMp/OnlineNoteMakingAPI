@@ -25,7 +25,7 @@ namespace OnlineNoteMakingApp.Controllers
         /// <param name="noteMessage"></param>
         /// <returns></returns>
         [HttpPost]
-        public int AddNote(string noteMessage)
+        public int AddNote([FromBody]string noteMessage)
         {
             return _noteService.AddNote(noteMessage);
         }
@@ -37,7 +37,7 @@ namespace OnlineNoteMakingApp.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost("{userId}/{userRoleId}")]
-        public bool AddNoteForUser(string noteMessage, int userId, int userRoleId)
+        public bool AddNoteForUser([FromBody]string noteMessage, int userId, int userRoleId)
         {
             return _noteService.AddNoteForUser(noteMessage, userId, userRoleId);
         }
