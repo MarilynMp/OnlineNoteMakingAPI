@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OnlineNoteMakingApp.Model;
 using OnlineNoteMakingApp.Model.View;
 using OnlineNoteMakingApp.Service.Interface;
 using System;
@@ -95,10 +96,10 @@ namespace OnlineNoteMakingApp.Controllers
         /// <param name="userId"></param>
         /// <param name="userRoleId"></param>
         /// <returns></returns>
-        [HttpPost("NoteUserAssociation/{noteId}/{userId}/{userRoleId}")]
-        public int AddNotesUserAssociation(int noteId, int userId, int userRoleId)
+        [HttpPost("NoteUserAssociation")]
+        public int AddNotesUserAssociation(NoteUserAssociation noteUserAssociation)
         {
-            return _noteService.AddNotesUserAssociation(noteId, userId, userRoleId);
+            return _noteService.AddNotesUserAssociation(noteUserAssociation.NoteId, noteUserAssociation.UserId, noteUserAssociation.UserRoleId);
         }
 
     }
