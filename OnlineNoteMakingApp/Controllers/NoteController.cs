@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineNoteMakingApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class NoteController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace OnlineNoteMakingApp.Controllers
         }
 
         /// <summary>
-        /// Add a Note
+        /// Add a Note Message
         /// </summary>
         /// <param name="noteMessage"></param>
         /// <returns></returns>
@@ -31,7 +31,7 @@ namespace OnlineNoteMakingApp.Controllers
         }
 
         /// <summary>
-        /// Add a note associated to a particular user
+        /// Add a note associated to a particular user with a role
         /// </summary>
         /// <param name="noteMessage"></param>
         /// <param name="userId"></param>
@@ -43,19 +43,19 @@ namespace OnlineNoteMakingApp.Controllers
         }
 
         /// <summary>
-        /// Update a note message
+        /// Update a note message by note id 
         /// </summary>
         /// <param name="noteMessage"></param>
         /// <param name="noteId"></param>
         /// <returns></returns>
         [HttpPut("{noteId}")]
-        public bool UpdateNote(string noteMessage, int noteId)
+        public bool UpdateNote([FromBody]string noteMessage, int noteId)
         {
             return _noteService.UpdateNote(noteMessage, noteId);
         }
 
         /// <summary>
-        /// Delete a note
+        /// Delete a note by note id
         /// </summary>
         /// <param name="noteId"></param>
         /// <returns></returns>
@@ -86,6 +86,19 @@ namespace OnlineNoteMakingApp.Controllers
         public bool DeleteNoteAssociation(int noteAssocitaionId)
         {
             return _noteService.DeleteNoteAssociation(noteAssocitaionId);
+        }
+
+        /// <summary>
+        /// Add association between an existing note and user with a role
+        /// </summary>
+        /// <param name="noteId"></param>
+        /// <param name="userId"></param>
+        /// <param name="userRoleId"></param>
+        /// <returns></returns>
+        [HttpPost("NoteUserAssociation/{noteId}/{userId}/{userRoleId}")]
+        public int AddNotesUserAssociation(int noteId, int userId, int userRoleId)
+        {
+            return _noteService.AddNotesUserAssociation(noteId, userId, userRoleId);
         }
 
     }

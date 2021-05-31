@@ -18,6 +18,12 @@ namespace OnlineNoteMakingApp.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// Validates User Creds
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns>True if creds are valid else false</returns>
         [HttpGet("{userName}/{password}")]
         public bool ValidateUserCreds(string userName, string password)
         {

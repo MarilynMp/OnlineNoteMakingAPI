@@ -29,7 +29,7 @@ namespace OnlineNoteMakingApp.Service.Implementation
             return true;
         }
 
-        private int AddNotesUserAssociation(int noteId, int userId, int userRoleId)
+        public int AddNotesUserAssociation(int noteId, int userId, int userRoleId)
         {
             return _noteDataAccess.AddNotesUserAssociation(noteId, userId, userRoleId);
         }

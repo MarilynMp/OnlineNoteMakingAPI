@@ -19,5 +19,7 @@ namespace OnlineNoteMakingApp.Service.Interface
         List<NotesForUserView> GetNotesForUser(int userId);
 
         bool DeleteNoteAssociation(int noteAssocitaionId);
+
+        int AddNotesUserAssociation(int noteId, int userId, int userRoleId);
     }
 }

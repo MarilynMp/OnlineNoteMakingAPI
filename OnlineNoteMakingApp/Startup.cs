@@ -10,7 +10,9 @@ using OnlineNoteMakingApp.DataAccess;
 using OnlineNoteMakingApp.Register;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace OnlineNoteMakingApp
@@ -36,6 +38,11 @@ namespace OnlineNoteMakingApp
                         Title = "Note Making API",
                         Version = "1"
                     });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
             });
 
             RegisterService.Register(services);
@@ -55,6 +62,8 @@ namespace OnlineNoteMakingApp
             app.UseSwaggerUI(options => {
                 options.SwaggerEndpoint("/swagger/NoteMakingAPISpec/swagger.json", "Note Making API");
             });
+            
+
             app.UseRouting();
 
             app.UseAuthorization();
