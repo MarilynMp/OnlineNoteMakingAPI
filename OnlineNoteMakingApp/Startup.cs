@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using OnlineNoteMakingApp.DataAccess;
+using OnlineNoteMakingApp.Middleware;
 using OnlineNoteMakingApp.Register;
 using System;
 using System.Collections.Generic;
@@ -30,8 +32,10 @@ namespace OnlineNoteMakingApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTokenAuthentication(Configuration);
             services.Add(new ServiceDescriptor(typeof(IDataContext), new DataContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.AddSwaggerGen(options => {
+            services.AddSwaggerGen(options =>
+            {
                 options.SwaggerDoc("NoteMakingAPISpec",
                     new Microsoft.OpenApi.Models.OpenApiInfo()
                     {
@@ -39,12 +43,43 @@ namespace OnlineNoteMakingApp
                         Version = "1"
                     });
 
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                    Enter 'Bearer' [space] and then your token in the text input below.
+                    \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                 {
+                   {
+                     new OpenApiSecurityScheme
+                     {
+                       Reference = new OpenApiReference
+                         {
+                           Type = ReferenceType.SecurityScheme,
+                           Id = "Bearer"
+                         },
+                         Scheme = "oauth2",
+                         Name = "Bearer",
+                         In = ParameterLocation.Header,
+
+                       },
+                       new List<string>()
+                     }
+                 });
+
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
             });
 
+            //dep injection
             RegisterService.Register(services);
             RegisterDataAccess.Register(services);
         }
@@ -59,13 +94,19 @@ namespace OnlineNoteMakingApp
 
             app.UseHttpsRedirection();
             app.UseSwagger();
-            app.UseSwaggerUI(options => {
+            app.UseSwaggerUI(options =>
+            {
                 options.SwaggerEndpoint("/swagger/NoteMakingAPISpec/swagger.json", "Note Making API");
             });
-            
+
 
             app.UseRouting();
-
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

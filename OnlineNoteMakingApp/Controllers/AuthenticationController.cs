@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineNoteMakingApp.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace OnlineNoteMakingApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService _authService;

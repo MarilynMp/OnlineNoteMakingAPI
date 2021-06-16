@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNoteMakingApp.Model;
 using OnlineNoteMakingApp.Model.View;
@@ -12,6 +13,7 @@ namespace OnlineNoteMakingApp.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class NoteController : ControllerBase
     {
         private readonly INoteService _noteService;
